@@ -12,7 +12,26 @@ const email = fakerID_ID.internet.email();
 const nomor_hp =
   "8" + fakerID_ID.string.numeric({ length: { max: 11, min: 9 } });
 
-test("Validate UI Login Page", async ({ page }) => {
+test.beforeEach("Login with Valid Credential", async ({ page }, testInfo) => {
+  if (testInfo.project.metadata.noHook || testInfo.title.includes("@no-hook")) {
+    return;
+  }
+  await page.goto("/");
+
+  // fill username and password
+  await page
+    .getByRole("textbox", { name: "Nama pengguna" })
+    .fill(username || "");
+  await page.getByRole("textbox", { name: "Kata sandi" }).fill(password || "");
+
+  // press login button
+  await page.getByRole("button", { name: "Masuk" }).click();
+
+  // validate url
+  await expect(page).toHaveURL("/");
+});
+
+test("Validate UI Login Page @no-hook", async ({ page }) => {
   await page.goto("/");
   await expect(page).toHaveURL(/login/);
 
@@ -29,7 +48,7 @@ test("Validate UI Login Page", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Masuk" })).toBeVisible();
 });
 
-test("Login with Invalid Credential", async ({ page }) => {
+test("Login with Invalid Credential @no-hook", async ({ page }) => {
   await page.goto("/");
 
   // fill username and password
@@ -45,37 +64,7 @@ test("Login with Invalid Credential", async ({ page }) => {
   await expect(page.getByText("salah")).toBeVisible();
 });
 
-test("Login with Valid Credential", async ({ page }) => {
-  await page.goto("/");
-
-  // fill username and password
-  await page
-    .getByRole("textbox", { name: "Nama pengguna" })
-    .fill(username || "");
-  await page.getByRole("textbox", { name: "Kata sandi" }).fill(password || "");
-
-  // press login button
-  await page.getByRole("button", { name: "Masuk" }).click();
-
-  // validate error message
-  await expect(page).toHaveURL("/");
-});
-
 test("Validate Home Page When Sucessfully Logged In", async ({ page }) => {
-  await page.goto("/");
-
-  // fill username and password
-  await page
-    .getByRole("textbox", { name: "Nama pengguna" })
-    .fill(username || "");
-  await page.getByRole("textbox", { name: "Kata sandi" }).fill(password || "");
-
-  // press login button
-  await page.getByRole("button", { name: "Masuk" }).click();
-
-  // validate error message
-  await expect(page).toHaveURL("/");
-
   // validate top nav
   await expect(page.getByRole("img", { name: "UII-Gateway" })).toBeVisible();
   await expect(page.locator("#dropdownNotif")).toBeVisible();
@@ -92,16 +81,6 @@ test("Validate Home Page When Sucessfully Logged In", async ({ page }) => {
 });
 
 test("Testing Logout Feature", async ({ page }) => {
-  await page.goto("/");
-  // fill username and password
-  await page
-    .getByRole("textbox", { name: "Nama pengguna" })
-    .fill(username || "");
-  await page.getByRole("textbox", { name: "Kata sandi" }).fill(password || "");
-
-  // press login button
-  await page.getByRole("button", { name: "Masuk" }).click();
-
   // logout through profile
   await page.getByRole("button", { name: "user" }).click();
   await page.getByRole("link", { name: "Keluar" }).click();
@@ -111,16 +90,6 @@ test("Testing Logout Feature", async ({ page }) => {
 });
 
 test("UIISurat-Validate UI", async ({ page }) => {
-  await page.goto("/");
-  // fill username and password
-  await page
-    .getByRole("textbox", { name: "Nama pengguna" })
-    .fill(username || "");
-  await page.getByRole("textbox", { name: "Kata sandi" }).fill(password || "");
-
-  // press login button
-  await page.getByRole("button", { name: "Masuk" }).click();
-
   // navigate to uiisurat
   await page.locator(".home-app-item").filter({ hasText: "UIISurat" }).click();
   await expect(page).toHaveURL(/letter/);
