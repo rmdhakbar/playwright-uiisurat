@@ -110,7 +110,7 @@ test("Testing Logout Feature", async ({ page }) => {
   await expect(page).toHaveURL(/login/);
 });
 
-test.only("UIISurat-Validate UI", async ({ page }) => {
+test("UIISurat-Validate UI", async ({ page }) => {
   await page.goto("/");
   // fill username and password
   await page
@@ -122,11 +122,9 @@ test.only("UIISurat-Validate UI", async ({ page }) => {
   await page.getByRole("button", { name: "Masuk" }).click();
 
   // navigate to uiisurat
-  await page.pause();
   await page.locator(".home-app-item").filter({ hasText: "UIISurat" }).click();
   await expect(page).toHaveURL(/letter/);
 
-  // const breadcrumbTexts = await page.locator(".breadcrumb li").allInnerTexts();
   const homeIcon = page
     .locator(".breadcrumb li")
     .first()
