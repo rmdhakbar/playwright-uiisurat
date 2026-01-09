@@ -103,4 +103,53 @@ test("UIISurat-Validate UI", async ({ page }) => {
   await expect(
     page.locator(".breadcrumb").filter({ hasText: "Surat" })
   ).toBeVisible();
+
+  await expect(
+    page.getByRole("heading", { name: "Selamat datang di UIISurat!" })
+  ).toBeVisible();
+
+  await expect(
+    page.getByText("Manajemen persuratan dan administrasi umum.")
+  ).toBeVisible();
+});
+
+test.only("UIISurat-Menambah Kontak Eksternal", async ({ page }) => {
+  // navigate to uiisurat
+  await page.locator(".home-app-item").filter({ hasText: "UIISurat" }).click();
+  await expect(page).toHaveURL(/letter/);
+
+  await page.getByRole("link", { name: "Master data" }).click();
+  await page.getByRole("link", { name: "Buku kontak" }).click();
+  await expect(
+    page.locator(".breadcrumb").filter({ hasText: "Buku kontak" })
+  ).toBeVisible();
+
+  await expect(
+    page.getByRole("tab", { name: "Kontak internal" })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("tab", { name: "Kontak eksternal" })
+  ).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Group jabatan" })).toBeVisible();
+
+  await page.pause();
+
+  await page.getByRole("tab", { name: "Kontak eksternal" }).click();
+  await page.getByRole("button", { name: "Tambah kontak" }).click();
+  await expect(
+    page
+      .locator(".modal-content")
+      .filter({ hasText: "Tambah kontak eksternal" })
+  ).toBeVisible();
+
+  // Form tambah kontak eksternal
+  await page.getByRole("radio", { name: "Perorangan" }).click();
+  await page.getByRole("textbox", { name: "Nama lengkap*" }).fill(namaLengkap);
+  await page
+    .getByRole("textbox", { name: "Instansi/Perusahaan*" })
+    .fill(perusahaan);
+  await page.getByRole("textbox", { name: "Jabatan*" }).fill(jabatan);
+  await page.getByRole("textbox", { name: "Alamat*" }).fill(alamat);
+  await page.getByRole("textbox", { name: "Email*" }).fill(email);
+  await page.getByRole("textbox", { name: "812-345-678" }).fill(nomor_hp);
 });
