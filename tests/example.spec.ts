@@ -131,9 +131,6 @@ test.only("UIISurat-Menambah Kontak Eksternal", async ({ page }) => {
     page.getByRole("tab", { name: "Kontak eksternal" })
   ).toBeVisible();
   await expect(page.getByRole("tab", { name: "Group jabatan" })).toBeVisible();
-
-  await page.pause();
-
   await page.getByRole("tab", { name: "Kontak eksternal" }).click();
   await page.getByRole("button", { name: "Tambah kontak" }).click();
   await expect(
@@ -141,6 +138,8 @@ test.only("UIISurat-Menambah Kontak Eksternal", async ({ page }) => {
       .locator(".modal-content")
       .filter({ hasText: "Tambah kontak eksternal" })
   ).toBeVisible();
+
+  await page.pause();
 
   // Form tambah kontak eksternal
   await page.getByRole("radio", { name: "Perorangan" }).click();
@@ -152,4 +151,6 @@ test.only("UIISurat-Menambah Kontak Eksternal", async ({ page }) => {
   await page.getByRole("textbox", { name: "Alamat*" }).fill(alamat);
   await page.getByRole("textbox", { name: "Email*" }).fill(email);
   await page.getByRole("textbox", { name: "812-345-678" }).fill(nomor_hp);
+  await page.getByRole("button", { name: "Batal" }).click();
+  await expect(page.locator(".modal-content")).not.toBeVisible();
 });
