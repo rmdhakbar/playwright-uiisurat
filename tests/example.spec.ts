@@ -113,7 +113,7 @@ test("UIISurat-Validate UI", async ({ page }) => {
   ).toBeVisible();
 });
 
-test.only("UIISurat-Menambah Kontak Eksternal", async ({ page }) => {
+test("UIISurat-Menambah Kontak Eksternal", async ({ page }) => {
   // navigate to uiisurat
   await page.locator(".home-app-item").filter({ hasText: "UIISurat" }).click();
   await expect(page).toHaveURL(/letter/);
@@ -138,8 +138,6 @@ test.only("UIISurat-Menambah Kontak Eksternal", async ({ page }) => {
       .locator(".modal-content")
       .filter({ hasText: "Tambah kontak eksternal" })
   ).toBeVisible();
-
-  await page.pause();
 
   // Form tambah kontak eksternal
   await page.getByRole("radio", { name: "Perorangan" }).click();
