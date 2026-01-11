@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
+import { ROUTES } from "../config/routes";
 
 export class LoginPage {
   readonly page: Page;
@@ -16,7 +17,7 @@ export class LoginPage {
   }
 
   async goto() {
-    await this.page.goto("/");
+    await this.page.goto(ROUTES.LOGIN);
   }
 
   async login(username: string, password: string) {
